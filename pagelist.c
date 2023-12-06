@@ -1,7 +1,29 @@
 #include "pagelist.h"
 
-int search(pagelist* pagelist, page* page) {
-    
+page* search(pagelist* pagelist, int id) {
+    if(pagelist == NULL) {
+        return NULL;
+    }
+    if(isEmpty(pagelist)) {
+        return NULL;
+    } else {
+        int index = pagelist->begin;
+        for(int i = 0; i < size(pagelist); i++) {
+            page* temp = pagelist->pages[index];
+
+            if(temp->id == id) {
+                return temp;
+            } 
+
+            index++;
+
+            if(index == cap(pagelist)) {
+                index = 0;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 int cap(pagelist* pagelist) {

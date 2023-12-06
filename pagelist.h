@@ -14,5 +14,9 @@ typedef struct {
 
 void insertPage(page* page, pagelist* pagelist);
 
+page* search(pagelist* pagelist, int id);
 
+int isEmpty(pagelist* pagelist);
+
+int isFull(pagelist* pagelist);
 #endif
