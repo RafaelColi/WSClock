@@ -17,7 +17,6 @@ int main() {
         wsclock(pagelist, id);
         printPagelist(pagelist);
         getchar();
-        system("clear");
     }
 
     return 0;
