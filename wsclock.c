@@ -2,25 +2,31 @@
 #define TAU 13
 
 void miss(pagelist* pagelist, int id) {
+    printf("Inserindo nova pagina na lista\n");
     page* page = createPage(id);
     insertPage(page, pagelist);
+    printPage(page);
 }
 
 void wsclock(pagelist* pagelist, int id) {
+    page* temp = search(pagelist, id);
+
+    if(temp != NULL) {
+        load(temp);
+        return;
+    }
+    
     if(isEmpty(pagelist) || !isFull(pagelist)) {
+        printf("Falta de pagina. Ha espaco na lista\n");
         miss(pagelist, id);
         return;
     } else {
-        page* temp = search(pagelist, id);
-
-        if(temp != NULL) {
-            load(temp);
-            return;
-        }
-
         int index = pagelist->arrow;
         for(int i = 0; i < size(pagelist); i++) {
             temp = pagelist->pages[index];
+            if(temp->M == 0) {
+                pagelist->clear = index;
+            }
 
             if(temp->R == 1) {
                 temp->R = 0;
@@ -31,6 +37,7 @@ void wsclock(pagelist* pagelist, int id) {
                     return;
                 } else if(temp->time > TAU && temp->M == 1) {
                     write(temp);
+                    pagelist->write += 1;
                 } 
             }
 
@@ -42,12 +49,23 @@ void wsclock(pagelist* pagelist, int id) {
 
             pagelist->arrow = index;
         }
+
+        if(pagelist->write) {
+            printf("Paginas no working set. Escrita escalonada. Repetindo varredura\n");
+            wsclock(pagelist, id);
+        } else {
+            printf("Paginas no working set. Sem escrita escalonada\n");
+            pagelist->arrow = pagelist->clear;
+            miss(pagelist, id);
+        }
     }
 
     return;
 }
 
 void load(page* page) {
+    printf("Pagina encontrada na lista. Carregando pagina\n");
+    printPage(page);
     page->R = 1;
     page->time += 1;
 
@@ -55,7 +73,8 @@ void load(page* page) {
 }
 
 void write(page* page) {
-    printf("Escrevendo no disco");
+    printf("Escrevendo pagina no disco\n");
+    printPage(page);
 
     page->M = 0;
 }

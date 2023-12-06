@@ -13,3 +13,8 @@ page* createPage(int id) {
 
     return temp;
 }
+
+void printPage(page* page) {
+    printf("[ID: %d| TIME: %d| R: %d| M: %d]\n", page->id, page->time, page->R, page->M);
+    return;
+}

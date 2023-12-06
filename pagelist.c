@@ -35,7 +35,6 @@ pagelist* createPagelist(int n) {
     temp->pages = (page**) calloc(n, sizeof(page*));
     temp->cap = n;
     temp->begin = -1;
-    temp->end = 0;
     return temp;
 }
 
@@ -63,13 +62,14 @@ int isEmpty(pagelist* pagelist) {
     }
 }
 
-void exibirpagelist(pagelist* pagelist) {
+void printPagelist(pagelist* pagelist) {
     if(pagelist == NULL || isEmpty(pagelist)) {
         return;
     } else {
+        printf("PRINTING PAGELIST...\n");
         int index = pagelist->begin;
         for(int i = 0; i < size(pagelist); i++) {
-            printf("%d ", pagelist->pages[index]);
+            printPage(pagelist->pages[index]);
             index++;
 
             if(index == cap(pagelist)) {
@@ -79,45 +79,17 @@ void exibirpagelist(pagelist* pagelist) {
     }
 }
 
-void imprimirpagelistNVezes(pagelist* pagelist, int n) {
-    if(pagelist == NULL) {
-        return;
-    }
-
-    if(isEmpty(pagelist)){
-        printf("pagelist Vazia");
-    } else {
-        printf("[");
-        for(int i = 1; i <= n; i++) {
-            int index = pagelist->begin;
-            for(int j = 1; j <= size(pagelist); j++) {
-                if(i == n && j == size(pagelist)) {
-                    printf("%d]", pagelist->pages[index]);
-                } else {
-                    printf("%d, ", pagelist->pages[index]);
-                }
-
-                index++;
-
-                if(index == cap(pagelist)) {
-                    index = 0;
-                }
-            }
-        }
-    }
-}
-
 void insertPage(page* page, pagelist* pagelist) {
-    if(isFull(pagelist)) {
-        return;
-    } 
-
     if(pagelist == NULL) {
         return;
     }
 
     if(isEmpty(pagelist)) {
-        pagelist->begin = pagelist->end = 0;
+        pagelist->begin = 0;
+
+        pagelist->pages[pagelist->end] = page;
+        pagelist->end += 1;
+        return;
     }
 
     if(isFull(pagelist)) {

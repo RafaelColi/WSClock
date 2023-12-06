@@ -13,4 +13,6 @@ typedef struct {
 
 page* createPage(int id);
 
+void printPage(page* page);
+
 #endif
