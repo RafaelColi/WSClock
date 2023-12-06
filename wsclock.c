@@ -48,15 +48,20 @@ void wsclock(pagelist* pagelist, int id) {
             }
 
             pagelist->arrow = index;
+            printf("Ponteiro -> ");
+            printPage(pagelist->pages[pagelist->arrow]);
         }
 
         if(pagelist->write) {
             printf("Paginas no working set. Escrita escalonada. Repetindo varredura\n");
             wsclock(pagelist, id);
+            pagelist->write = 0;
         } else {
             printf("Paginas no working set. Sem escrita escalonada\n");
+            int aux = pagelist->arrow;
             pagelist->arrow = pagelist->clear;
             miss(pagelist, id);
+            pagelist->arrow = aux;
         }
     }
 
