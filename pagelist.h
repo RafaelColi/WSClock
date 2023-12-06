@@ -14,7 +14,5 @@ typedef struct {
 
 void insertPage(page* page, pagelist* pagelist);
 
-void removePage(page* page, pagelist* pagelist);
-
 
 #endif

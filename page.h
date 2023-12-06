@@ -11,6 +11,6 @@ typedef struct {
     int time;
 } page;
 
-
+page* createPage(int id);
 
 #endif

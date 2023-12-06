@@ -1,25 +1,7 @@
 #include "pagelist.h"
 
-int search(pagelist* pagelist, int e) {
-    if(pagelist == NULL) {
-        return -1;
-    }
-
-    if(isEmpty(pagelist)){
-        return 0;
-    } else {
-        int index = pagelist->arrow;
-        for(int i = 1; i < size(pagelist); i++) {
-            if(pagelist->pages[index] == e) {
-                return 1;
-            }
-            index++;
-
-            if(index == cap(pagelist)) {
-                index = 0;
-            }
-        }
-    }
+int search(pagelist* pagelist, page* page) {
+    
 }
 
 int cap(pagelist* pagelist) {
@@ -40,7 +22,7 @@ int isFull(pagelist* pagelist) {
         return 0;
     }
 
-    if(size(pagelist) == pagelist->cap) {
+    if(size(pagelist) == cap(pagelist)) {
         return 1;
     } else {
         return 0;
@@ -64,7 +46,7 @@ void exibirpagelist(pagelist* pagelist) {
         return;
     } else {
         int index = pagelist->begin;
-        for(int i = 1; i <= size(pagelist); i++) {
+        for(int i = 0; i < size(pagelist); i++) {
             printf("%d ", pagelist->pages[index]);
             index++;
 
@@ -103,27 +85,31 @@ void imprimirpagelistNVezes(pagelist* pagelist, int n) {
     }
 }
 
-int insertPage(pagelist* pagelist, int e) {
+void insertPage(page* page, pagelist* pagelist) {
     if(isFull(pagelist)) {
-        return 0;
+        return;
     } 
 
     if(pagelist == NULL) {
-        return -1;
+        return;
     }
 
     if(isEmpty(pagelist)) {
         pagelist->begin = pagelist->end = 0;
     }
 
-    pagelist->pages[pagelist->end] = e;
-    pagelist->end += 1;
+    if(isFull(pagelist)) {
+        pagelist->pages[pagelist->arrow] = page;
+    } else {
+        pagelist->pages[pagelist->end] = page;
+        pagelist->end += 1;
 
-    if(pagelist->end == cap(pagelist)) {
-        pagelist->end = 0;
+        if(pagelist->end == cap(pagelist)) {
+            pagelist->end = 0;
+        }
     }
 
-    return 1;
+    return;
 }
 
 void liberarpagelist(pagelist** pagelist) {
@@ -136,27 +122,6 @@ void liberarpagelist(pagelist** pagelist) {
     *pagelist = NULL;
 }
 
-int removePage(pagelist* pagelist, int *v) {
-    if(pagelist == NULL || v == NULL) {
-        return -1;
-    }
-
-    if(isEmpty(pagelist)) {
-        return 0;
-    }
-
-    *v = pagelist->pages[pagelist->begin];
-    pagelist->begin++;
-
-    if(pagelist->begin == cap(pagelist)) {
-        pagelist->begin = 0;
-    }
-
-    if(pagelist->begin == pagelist->end) {
-        pagelist->begin = -1;
-        pagelist->end = 0;
-    }
-}
 
 int size(pagelist* pagelist) {
     if(pagelist->begin == -1) {
