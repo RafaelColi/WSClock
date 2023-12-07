@@ -1,5 +1,5 @@
 #include "wsclock.h"
-#define TAU 13
+#define TAU 5
 
 void miss(pagelist* pagelist, int id) {
     printf("Inserindo nova pagina na lista\n");
